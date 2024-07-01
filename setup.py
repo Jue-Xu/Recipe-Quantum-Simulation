@@ -23,12 +23,12 @@ import os
 # with open("quantum_simulation_recipe/VERSION", "w", encoding="utf-8") as fh:
 #     fh.write("%s\n" % package_version)
 
-# with open("README.md", "r", encoding="utf-8") as fh:
-#     long_description = fh.read()
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
 
 setuptools.setup(
     name="quantum-simulation-recipe",
-    version='0.0.5',
+    version='0.0.6',
     # version=package_version,
     # author="Jue XU",
     author_email="xujue@connect.hku.hk",
