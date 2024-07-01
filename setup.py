@@ -28,17 +28,18 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="quantum-simulation-recipe",
-    # version='0.0.3',
-    version=package_version,
+    version='0.0.4',
+    # version=package_version,
     # author="Jue XU",
     author_email="xujue@connect.hku.hk",
     description="Recipe for quantum simulation",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Jue-Xu/quantum-simulation-recipe",
-    packages=setuptools.find_packages(include=["quantum_simulation_recipe"]),
-    package_data={"quantum_simulation_recipe": ["VERSION"]},
-    include_package_data=True,
+    packages=setuptools.find_packages(),
+    # packages=setuptools.find_packages(include=["quantum_simulation_recipe"]),
+    # package_data={"quantum_simulation_recipe": ["VERSION"]},
+    # include_package_data=True,
     license="Apache-2.0",
     classifiers=[
         "Programming Language :: Python :: 3",
