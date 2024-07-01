@@ -28,7 +28,7 @@ import os
 
 setuptools.setup(
     name="quantum-simulation-recipe",
-    version='0.0.4',
+    version='0.0.5',
     # version=package_version,
     # author="Jue XU",
     author_email="xujue@connect.hku.hk",
@@ -36,8 +36,8 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Jue-Xu/quantum-simulation-recipe",
-    # packages=setuptools.find_packages(),
-    packages=setuptools.find_packages(include=["quantum_simulation_recipe"]),
+    packages=setuptools.find_packages(),
+    # packages=setuptools.find_packages(include=["quantum_simulation_recipe"]),
     # package_data={"quantum_simulation_recipe": ["VERSION"]},
     # include_package_data=True,
     license="Apache-2.0",
