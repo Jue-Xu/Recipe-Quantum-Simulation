@@ -1,7 +1,8 @@
 # Quantum Simulation Recipes
 <!-- ![Figure](./figs/idea.png) -->
-This python package contains ingredients for quantum simulation, such as the Hamiltonians and algorithm primitives.
 [![License](https://img.shields.io/github/license/qiskit-community/qiskit-algorithms.svg?style=popout-square)](https://opensource.org/licenses/Apache-2.0)
+
+This python package contains ingredients for quantum simulation, such as the Hamiltonians and algorithm primitives.
 
 ## Usage 
 ```bash

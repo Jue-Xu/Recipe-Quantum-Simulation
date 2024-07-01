@@ -28,7 +28,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="quantum-simulation-recipe",
-    version='0.0.1',
+    version='0.0.3',
     # version=cf_remote_version,
     author="Jue XU",
     author_email="xujue@connect.hku.hk",
