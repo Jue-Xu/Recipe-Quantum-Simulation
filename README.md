@@ -1,12 +1,14 @@
 # Quantum Simulation Recipes
 <!-- ![Figure](./figs/idea.png) -->
-[![License](https://img.shields.io/github/license/qiskit-community/qiskit-algorithms.svg?style=popout-square)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/github/license/Jue-Xu/Quantum-Simulation-Recipe.svg?style=popout-square)](https://opensource.org/licenses/Apache-2.0)
+[![Release](https://img.shields.io/github/v/release/jue-xu/Quantum-Simulation-Recipe?include_prereleases)](https://github.com/Jue-Xu/Quantum-Simulation-Recipe/releases)
 
 This [python package](https://pypi.org/project/quantum-simulation-recipe/) contains ingredients for quantum simulation, such as the Hamiltonians and algorithmic primitives, mainly build on [qiskit](https://www.ibm.com/quantum/qiskit), [openfermion](https://github.com/quantumlib/OpenFermion).
 
 ##  Install
 ```bash
 conda create --name qs python=3.10 
+conda activate qs
 pip install quantum-simulation-recipe
 ```
 
@@ -19,7 +21,8 @@ H = spin_ham.Nearest_Neighbour_1d(4)
 H.ham
 ```
 More details
-https://github.com/Jue-Xu/Quantum-Simulation-Recipe/tree/main/tests/test.ipynb
+<!-- https://github.com/Jue-Xu/Quantum-Simulation-Recipe/tree/main/tests/test.ipynb -->
+https://jue-xu.github.io/Quantum-Simulation-Cookbook
 
 ## Content
 ### Common Hamiltonians
@@ -51,3 +54,5 @@ https://github.com/Jue-Xu/Quantum-Simulation-Recipe/tree/main/tests/test.ipynb
 - QSP
 - ITE
 
+## Misc
+Support Jax
