@@ -97,7 +97,7 @@ def op2mat(ops, n_qubits, to_array=False):
 
     return list_sparse_mat
 
-class h2o_hamiltonian:
+class H2O:
     def __init__(self, verbose=False):
         # Set molecule parameters
         self.use_ActiveSpace = True
@@ -212,8 +212,8 @@ def pauli_commutator(pauli_str1, pauli_str2):
 
     return product, 2*(factor%2) * phase   
 
-class hydrogen_chain_hamiltonian:
-    def __init__(self, chain_length, bond_length, verbose=False):
+class Hydrogen_Chain:
+    def __init__(self, chain_length: int, bond_length: float, verbose=False):
 
 # def hydrogen_chain_hamiltonian(chain_length, bond_length): 
         self.chain_length = chain_length
@@ -295,7 +295,7 @@ class hydrogen_chain_hamiltonian:
 
     # return hydrogen_hamiltonian_list
 
-def LiH_hamiltonian():
+def LiH():
     basis = 'sto-3g'
     multiplicity = 1
     # Set Hamiltonian parameters.
