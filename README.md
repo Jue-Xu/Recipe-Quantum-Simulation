@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/github/license/Jue-Xu/Quantum-Simulation-Recipe.svg?style=popout-square)](https://opensource.org/licenses/Apache-2.0)
 [![Release](https://img.shields.io/github/v/release/jue-xu/Quantum-Simulation-Recipe?include_prereleases)](https://github.com/Jue-Xu/Quantum-Simulation-Recipe/releases)
 
-This python package (published on [PiP](https://pypi.org/project/quantum-simulation-recipe/)) contains ingredients for quantum simulation, such as the Hamiltonians and algorithmic primitives, mainly build on [qiskit](https://www.ibm.com/quantum/qiskit), [openfermion](https://github.com/quantumlib/OpenFermion), etc.
+This python package (published on [PiP](https://pypi.org/project/quantum-simulation-recipe/)) contains basic ingredients for quantum simulation, such as the Hamiltonians and algorithmic primitives, mainly build on [qiskit](https://www.ibm.com/quantum/qiskit), [openfermion](https://github.com/quantumlib/OpenFermion), etc.
 
 ##  Install
 ```bash
