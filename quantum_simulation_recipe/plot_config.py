@@ -7,34 +7,18 @@ import matplotlib.ticker as ticker
 from matplotlib.colors import ListedColormap
 import colorsys
 
-default_color_cycle = ["#B65655FF", "#5471abFF", "#6aa66eFF", "#A66E6AFF"]
+SMALL_SIZE = 14
+MEDIUM_SIZE = 18  #default 10
+LARGE_SIZE = 24
+# MARKER_SIZE = 10
 
-# Function to lighten a color
-def lighten_color(color, amount=0.3):
-    # Convert color from hexadecimal to RGB
-    r, g, b, a = tuple(int(color[i:i+2], 16) for i in (1, 3, 5, 7))
-    # Convert RGB to HLS
-    h, l, s = colorsys.rgb_to_hls(r/255, g/255, b/255)
-    # Lighten the luminance component
-    l = min(1, l + amount)
-    # Convert HLS back to RGB
-    r, g, b = tuple(round(c * 255) for c in colorsys.hls_to_rgb(h, l, s))
-    # Convert RGB back to hexadecimal
-    new_color = f"#{r:02x}{g:02x}{b:02x}{a:02x}"
-    return new_color
-
-def set_color_cycle(color_cycle, alpha=0.3, mfc=True):
-    color_cycle_light = [lighten_color(color, alpha) for color in color_cycle]
-    if mfc:
-        colors = mpl.cycler(mfc=color_cycle_light, color=color_cycle, markeredgecolor=color_cycle)
-    else:
-        colors = mpl.cycler(color=color_cycle, markeredgecolor=color_cycle)
-    mpl.rc('axes', prop_cycle=colors)
-
-set_color_cycle(default_color_cycle)
-# mpl.rc('axes', grid=True, edgecolor='k', prop_cycle=colors)
-# mpl.rcParams['axes.prop_cycle'] = colors
-# mpl.rcParams['lines.markeredgecolor'] = 'C'
+plt.rc('font', size=MEDIUM_SIZE)  # controls default text sizes
+plt.rc('axes', titlesize=LARGE_SIZE)  # fontsize of the axes title
+plt.rc('axes', labelsize=LARGE_SIZE)  # fontsize of the x and y labels
+plt.rc('xtick', labelsize=LARGE_SIZE)  # fontsize of the tick labels
+plt.rc('ytick', labelsize=LARGE_SIZE)  # fontsize of the tick labels
+plt.rc('legend', fontsize=MEDIUM_SIZE)  # legend fontsize
+plt.rc('figure', titlesize=LARGE_SIZE)  # fontsize of the figure title
 
 mpl.rcParams['font.family'] = 'sans-serif'  # 'Helvetica'
 mpl.rcParams['axes.linewidth'] = 1.5
@@ -55,24 +39,57 @@ mpl.rcParams['axes.grid'] = True
 mpl.rcParams['savefig.bbox'] = 'tight'
 mpl.rcParams['savefig.transparent'] = True
 
-SMALL_SIZE = 14
-MEDIUM_SIZE = 18  #default 10
-LARGE_SIZE = 24
-# MARKER_SIZE = 10
 
-plt.rc('font', size=MEDIUM_SIZE)  # controls default text sizes
-plt.rc('axes', titlesize=LARGE_SIZE+2)  # fontsize of the axes title
-plt.rc('axes', labelsize=LARGE_SIZE)  # fontsize of the x and y labels
-plt.rc('xtick', labelsize=LARGE_SIZE)  # fontsize of the tick labels
-plt.rc('ytick', labelsize=LARGE_SIZE)  # fontsize of the tick labels
-plt.rc('legend', fontsize=MEDIUM_SIZE-2)  # legend fontsize
-plt.rc('figure', titlesize=LARGE_SIZE)  # fontsize of the figure title
+# Function to lighten a color
+def lighten_color(color, amount=0.3):
+    # Convert color from hexadecimal to RGB
+    if isinstance(color, str):
+        r, g, b, a = tuple(int(color[i:i+2], 16) for i in (1, 3, 5, 7))
+    else:
+        r, g, b, a = color
+        if 0 <= r <= 1 and 0 <= g <= 1 and 0 <= b <= 1 and 0 <= a <= 1:
+            r, g, b, a = int(r*255), int(g*255), int(b*255), int(a*255)
+        else: 
+            raise ValueError('Color should be in hexadecimal or RGB format')
+    # print(r, g, b, a)
+    # Convert RGB to HLS
+    h, l, s = colorsys.rgb_to_hls(r/255, g/255, b/255)
+    # Lighten the luminance component
+    l = min(1, l + amount)
+    # Convert HLS back to RGB
+    r, g, b = tuple(round(c * 255) for c in colorsys.hls_to_rgb(h, l, s))
+    # Convert RGB back to hexadecimal
+    new_color = f"#{r:02x}{g:02x}{b:02x}{a:02x}"
+    return new_color
 
-# def data_plot(x, y, marker, label, alpha=1, linewidth=1, loglog=True, markeredgecolor='black'):
-#     if loglog:
-#         plt.loglog(x, y, marker, label=label, linewidth=linewidth, markeredgecolor=markeredgecolor, markeredgewidth=0.5, alpha=alpha)
-#     else:
-#         plt.plot(x, y, marker, label=label, linewidth=linewidth, markeredgecolor=markeredgecolor, markeredgewidth=0.5, alpha=alpha)
+def set_color_cycle(color_cycle, alpha=0.3, mfc=True):
+    color_cycle_light = [lighten_color(color, alpha) for color in color_cycle]
+    if mfc:
+        colors = mpl.cycler(mfc=color_cycle_light, color=color_cycle, markeredgecolor=color_cycle)
+    else:
+        colors = mpl.cycler(color=color_cycle, markeredgecolor=color_cycle)
+    mpl.rc('axes', prop_cycle=colors)
+
+default_color_cycle = ["#B65655FF", "#5471abFF", "#6aa66eFF", "#A66E6AFF"]
+set_color_cycle(default_color_cycle)
+# mpl.rc('axes', grid=True, edgecolor='k', prop_cycle=colors)
+# mpl.rcParams['axes.prop_cycle'] = colors
+# mpl.rcParams['lines.markeredgecolor'] = 'C'
+
+from colorspace import sequential_hcl
+class GradColors:
+    def __init__(self, rate_num):
+        # https://colorspace.r-forge.r-project.org/reference/hcl_palettes.html
+        self.purple = mpl.colors.ListedColormap(sequential_hcl("Purples")(rate_num+1)[:-1][::-1], name='from_list', N=None) 
+        self.red = mpl.colors.ListedColormap(sequential_hcl("Reds")(rate_num+1)[:-1][::-1], name='from_list', N=None) 
+        self.green = mpl.colors.ListedColormap(sequential_hcl("Greens")(rate_num+1)[:-1][::-1], name='from_list', N=None) 
+        self.blue = mpl.colors.ListedColormap(sequential_hcl("Blues")(rate_num+1)[:-1][::-1], name='from_list', N=None) 
+        self.orange = mpl.colors.ListedColormap(sequential_hcl("Oranges")(rate_num+1)[:-1][::-1], name='from_list', N=None) 
+        # self.return_colors()
+
+    def get_colors(self, c: str):
+        return mpl.colors.ListedColormap(sequential_hcl(c)(self.rate_num+1)[:-1][::-1], name='from_list', N=None) 
+
 
 from scipy.optimize import curve_fit
 from math import ceil, floor, log, exp
@@ -141,6 +158,40 @@ def ax_set_text(ax, x_label, y_label, title=None, legend='best', xticks=None, yt
     if yticks is not None: 
         ax.set_yticks(yticks)
         ax.get_yaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
+
+# def data_plot(x, y, marker, label, alpha=1, linewidth=1, loglog=True, markeredgecolor='black'):
+#     if loglog:
+#         plt.loglog(x, y, marker, label=label, linewidth=linewidth, markeredgecolor=markeredgecolor, markeredgewidth=0.5, alpha=alpha)
+#     else:
+#         plt.plot(x, y, marker, label=label, linewidth=linewidth, markeredgecolor=markeredgecolor, markeredgewidth=0.5, alpha=alpha)
+
+def plot_evo(ax, t_list, y_list, marker, color='', title='', xlabel='', ylabel='', label='', markersize=5, markeredgewidth=1, inset=False):
+    if color == '':
+        ax.plot(t_list, y_list, marker, label=label, markersize=markersize, markeredgewidth=markeredgewidth)
+        # ax.plot(t_list, y_list, '-', markersize=5)
+        # ax.plot(t_list, y_list, 'o', label=label, markersize=5)
+        # ax.plot(t_list, y_list, marker, label=label, markeredgecolor='k', markeredgewidth=0.4, markersize=5)
+    else:
+        ax.plot(t_list, y_list, marker, color=color, label=label, markeredgecolor=color, markeredgewidth=markeredgewidth, markersize=markersize, mfc=lighten_color(color, 0.3))
+        # ax.plot(t_list, y_list, marker, color=color, label=label, markeredgecolor=color, markeredgewidth=0.4, markersize=markersize, mfc=color[:-2]+"80")
+    if not inset: 
+        ax.set_title(title)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+    if title  != '': ax.set_title(title)
+    if xlabel != '': 
+        ax.set_xlabel(xlabel)
+    # else:
+    #     ax.set_xticks([]) 
+    if ylabel != '': ax.set_ylabel(ylabel)
+    # else:
+    #     ax.set_xticks([])
+
+def letter_annotation(axes, x_offset, y_offset, letters, fontsize=14):
+    # https://towardsdatascience.com/a-guide-to-matplotlib-subfigures-for-creating-complex-multi-panel-figures-70fa8f6c38a4
+    for letter in letters:
+        axes[letter].text(x_offset, y_offset, f'({letter})', transform=axes[letter].transAxes, size=fontsize, weight='bold')
+
 
 def matrix_plot(M):
     fig, ax = plt.subplots()
