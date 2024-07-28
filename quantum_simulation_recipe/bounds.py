@@ -5,7 +5,7 @@ from numpy.linalg import matrix_power
 import scipy.sparse.linalg as ssla
 
 import numpy as np
-from measure import commutator, norm
+from quantum_simulation_recipe.measure import commutator, norm
 
 # def commutator(A, B):
 #     return A @ B - B @ A
@@ -187,7 +187,7 @@ def analytic_loose_commutator_bound(n, J, h, dt, pbc=False, verbose=False):
     analytic_error_bound = c1 * dt**3 / 12 + c2 * dt**3 / 24
     return analytic_error_bound
 
-from spin import *
+from quantum_simulation_recipe.spin import *
 
 # def relaxed_commutator_bound(n, J, h, dt, verbose=False):
 #     hnn = Nearest_Neighbour_1d(n, Jx=J, Jy=J, Jz=J, hx=h, hy=0, hz=0, pbc=False, verbose=False)

@@ -20,7 +20,7 @@ import jax.scipy.linalg as jsl
 
 import matplotlib.pyplot as plt
 
-from bounds import *
+# from quantum_simulation_recipe.bounds import *
 
 def expH(H, t, use_jax=False):
     # # check H is Hermitian
@@ -63,7 +63,7 @@ def pf(h_list, t, r: int, order: int=2, use_jax=False, return_exact=False, verbo
         raise ValueError('higher order is not defined')
 
     if return_exact:
-        exact_U = expm(-1j * t * sum(h_list))
+        exact_U = expH(sum(h_list), t)
         return appro_U, exact_U
     else:
         return appro_U
@@ -156,23 +156,23 @@ def mpi_sparse_expm(list_herms, t, r):
 
     return list_unitaries
 
-from measure import op_error
-def sparse_trotter_error(list_herm: list, r: int, t: int) -> float:
-    print('-------sparse_trotter_error--------')
-    exact_U = ssla.expm(-1j * t * sum(list_herm))
-    # list_U = jax_matrix_exponential(jnp.array(-1j * t / (2*r) * np.array(list_herm)))
-    # list_U = vectorized_sparse_expm(-1j * t / (2*r) * np.array(list_herm))
-    # list_herm_scaled = np.array([-1j * t / (2*r) * herm for herm in list_herm])
-    # list_U = ssla.expm(list_herm_scaled) 
-    # list_U = [ssla.expm(-1j * t / (2*r) * herm) for herm in list_herm]
-    list_U = mpi_sparse_expm(list_herm, t, 2*r)
-    # list_U = jax_matrix_exponential(jnp.array([-1j * t / (2*r) * herm.toarray() for herm in np.array(list_herm)]))
-    list_U2 = [U**2 for U in list_U]
-    # trotter_error_list = op_error(exact_U, matrix_power(sparse_multi_dot(list_U2), r))
-    trotter_error_list = op_error(exact_U, sparse_multi_dot(list_U2)**r)
-    # trotter_error_list = op_error(exact_U, np.linalg.matrix_power(np.linalg.multi_dot(np.array(list_U2)), r))
-    # second-order trotter
-    trotter_error_list_2nd = op_error(exact_U, (sparse_multi_dot(list_U) @ sparse_multi_dot(list_U[::-1]))**r)
-    # trotter_error_list_2nd = op_error(exact_U, np.linalg.matrix_power(np.linalg.multi_dot(np.array(list_U)) @ np.linalg.multi_dot(np.array(list_U[::-1])), r))
+# from quantum_simulation_recipe.measure import op_error
+# def sparse_trotter_error(list_herm: list, r: int, t: int) -> float:
+#     print('-------sparse_trotter_error--------')
+#     exact_U = ssla.expm(-1j * t * sum(list_herm))
+#     # list_U = jax_matrix_exponential(jnp.array(-1j * t / (2*r) * np.array(list_herm)))
+#     # list_U = vectorized_sparse_expm(-1j * t / (2*r) * np.array(list_herm))
+#     # list_herm_scaled = np.array([-1j * t / (2*r) * herm for herm in list_herm])
+#     # list_U = ssla.expm(list_herm_scaled) 
+#     # list_U = [ssla.expm(-1j * t / (2*r) * herm) for herm in list_herm]
+#     list_U = mpi_sparse_expm(list_herm, t, 2*r)
+#     # list_U = jax_matrix_exponential(jnp.array([-1j * t / (2*r) * herm.toarray() for herm in np.array(list_herm)]))
+#     list_U2 = [U**2 for U in list_U]
+#     # trotter_error_list = op_error(exact_U, matrix_power(sparse_multi_dot(list_U2), r))
+#     trotter_error_list = op_error(exact_U, sparse_multi_dot(list_U2)**r)
+#     # trotter_error_list = op_error(exact_U, np.linalg.matrix_power(np.linalg.multi_dot(np.array(list_U2)), r))
+#     # second-order trotter
+#     trotter_error_list_2nd = op_error(exact_U, (sparse_multi_dot(list_U) @ sparse_multi_dot(list_U[::-1]))**r)
+#     # trotter_error_list_2nd = op_error(exact_U, np.linalg.matrix_power(np.linalg.multi_dot(np.array(list_U)) @ np.linalg.multi_dot(np.array(list_U[::-1])), r))
     
-    return [trotter_error_list, trotter_error_list_2nd]
+#     return [trotter_error_list, trotter_error_list_2nd]
