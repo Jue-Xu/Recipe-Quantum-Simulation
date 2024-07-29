@@ -21,8 +21,8 @@ if "-" in package_version:
 v_strs = package_version.split(".")
 print(v_strs)
 # package_version = ".".join(v_strs[:-1]) + '.' + str(int(v_strs[-1])+1)
-assert "-" not in package_version
-assert "." in package_version
+# assert "-" not in package_version
+# assert "." in package_version
 
 assert os.path.isfile("quantum_simulation_recipe/version.py")
 with open("quantum_simulation_recipe/VERSION", "w", encoding="utf-8") as fh:
