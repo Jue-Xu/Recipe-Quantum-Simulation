@@ -24,9 +24,9 @@ package_version = ".".join(v_strs[:-1]) + '.' + str(int(v_strs[-1])+1)
 assert "-" not in package_version
 assert "." in package_version
 
-assert os.path.isfile("quantum_simulation_recipe/version.py")
-with open("quantum_simulation_recipe/VERSION", "w", encoding="utf-8") as fh:
-    fh.write("%s\n" % package_version)
+# assert os.path.isfile("quantum_simulation_recipe/version.py")
+# with open("quantum_simulation_recipe/VERSION", "w", encoding="utf-8") as fh:
+#     fh.write("%s\n" % package_version)
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -54,7 +54,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
         # "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Operating System :: OS Independent",
+        # "Operating System :: OS Independent",
     ],
     python_requires=">=3.10",
     entry_points={"console_scripts": ["quantum-simulation-recipe = quantum_simulation_recipe.main:main"]},
