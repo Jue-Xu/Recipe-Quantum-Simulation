@@ -71,7 +71,7 @@ def set_color_cycle(color_cycle, alpha=0.3, mfc=True):
     mpl.rc('axes', prop_cycle=colors)
 
 default_color_cycle = ["#B65655FF", "#5471abFF", "#6aa66eFF", "#A66E6AFF"]
-set_color_cycle(default_color_cycle)
+# set_color_cycle(default_color_cycle)
 # mpl.rc('axes', grid=True, edgecolor='k', prop_cycle=colors)
 # mpl.rcParams['axes.prop_cycle'] = colors
 # mpl.rcParams['lines.markeredgecolor'] = 'C'
@@ -79,12 +79,14 @@ set_color_cycle(default_color_cycle)
 from colorspace import sequential_hcl
 class GradColors:
     def __init__(self, rate_num):
+        self.rate_num = rate_num
         # https://colorspace.r-forge.r-project.org/reference/hcl_palettes.html
         self.purple = mpl.colors.ListedColormap(sequential_hcl("Purples")(rate_num+1)[:-1][::-1], name='from_list', N=None) 
         self.red = mpl.colors.ListedColormap(sequential_hcl("Reds")(rate_num+1)[:-1][::-1], name='from_list', N=None) 
         self.green = mpl.colors.ListedColormap(sequential_hcl("Greens")(rate_num+1)[:-1][::-1], name='from_list', N=None) 
         self.blue = mpl.colors.ListedColormap(sequential_hcl("Blues")(rate_num+1)[:-1][::-1], name='from_list', N=None) 
         self.orange = mpl.colors.ListedColormap(sequential_hcl("Oranges")(rate_num+1)[:-1][::-1], name='from_list', N=None) 
+        self.mint = mpl.colors.ListedColormap(sequential_hcl("Mint")(rate_num+1)[:-1][::-1], name='from_list', N=None)
         # self.return_colors()
 
     def get_colors(self, c: str):
@@ -165,7 +167,7 @@ def ax_set_text(ax, x_label, y_label, title=None, legend='best', xticks=None, yt
 #     else:
 #         plt.plot(x, y, marker, label=label, linewidth=linewidth, markeredgecolor=markeredgecolor, markeredgewidth=0.5, alpha=alpha)
 
-def plot_evo(ax, t_list, y_list, marker, color='', title='', xlabel='', ylabel='', label='', markersize=5, markeredgewidth=1, inset=False):
+def plot_evo(ax, t_list, y_list, marker, color='', title='', xlabel='', ylabel='', label='', markersize=8, markeredgewidth=1, inset=False):
     if color == '':
         ax.plot(t_list, y_list, marker, label=label, markersize=markersize, markeredgewidth=markeredgewidth)
         # ax.plot(t_list, y_list, '-', markersize=5)
