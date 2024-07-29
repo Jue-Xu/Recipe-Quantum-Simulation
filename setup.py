@@ -15,7 +15,8 @@ if "-" in package_version:
     # so change it to: "1.3.3+22.git.gdf81228"
     # See: https://peps.python.org/pep-0440/#local-version-segments
     v,i,s = package_version.split("-")
-    package_version = v + "+" + i + ".git." + s
+    # package_version = v + "+" + i + ".git." + s
+    package_version = v 
 
 v_strs = package_version.split(".")
 print(v_strs)
