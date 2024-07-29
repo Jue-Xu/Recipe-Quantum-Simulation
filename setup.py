@@ -18,9 +18,9 @@ if "-" in package_version:
     # package_version = v + "+" + i + ".git." + s
     package_version = v 
 
-v_strs = package_version.split(".")
-print(v_strs)
-package_version = ".".join(v_strs[:-1]) + '.' + str(int(v_strs[-1])+1)
+# v_strs = package_version.split(".")
+# print(v_strs)
+# package_version = ".".join(v_strs[:-1]) + '.' + str(int(v_strs[-1])+1)
 assert "-" not in package_version
 assert "." in package_version
 
