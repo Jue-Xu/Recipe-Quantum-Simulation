@@ -7,7 +7,7 @@ package_version = (
     .stdout.decode("utf-8")
     .strip()
 )
-print(package_version)
+# print(package_version)
 
 if "-" in package_version:
     # when not on tag, git describe outputs: "1.3.3-22-gdf81228"
@@ -18,8 +18,8 @@ if "-" in package_version:
     # package_version = v + "+" + i + ".git." + s
     package_version = v 
 
-v_strs = package_version.split(".")
-print(v_strs)
+# v_strs = package_version.split(".")
+# print(v_strs)
 # package_version = ".".join(v_strs[:-1]) + '.' + str(int(v_strs[-1])+1)
 # assert "-" not in package_version
 # assert "." in package_version
