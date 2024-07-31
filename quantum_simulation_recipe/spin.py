@@ -7,8 +7,11 @@ from qiskit.quantum_info import SparsePauliOp
 import random
 
 class Nearest_Neighbour_1d:
-    def __init__(self, n: int, Jx=1, Jy=1, Jz=1, hx=0.2, hy=0, hz=0, pbc=False, verbose=False, rand_field=[]):
+    def __init__(self, n: int, Jx=0, Jy=0, Jz=0, hx=0, hy=0, hz=0, pbc=False, verbose=False, rand_field=[]):
         self.n = n
+        self.Jx, self.Jy, self.Jz = Jx, Jy, Jz
+        self.hx, self.hy, self.hz = hx, hy, hz
+
         self.xx_tuples = [('XX', [i, i + 1], Jx) for i in range(0, n-1)]
         self.yy_tuples = [('YY', [i, i + 1], Jy) for i in range(0, n-1)]
         self.zz_tuples = [('ZZ', [i, i + 1], Jz) for i in range(0, n-1)]
@@ -54,8 +57,10 @@ class Nearest_Neighbour_1d:
 
 
 class Power_Law:
-    def __init__(self, n: int, alpha=4, Jx=1, Jy=1, Jz=1, hx=0.0, hy=0.0, hz=0.2, pbc=False, verbose=False):
+    def __init__(self, n: int, alpha: int, Jx=0, Jy=0, Jz=0, hx=0.0, hy=0.0, hz=0, pbc=False, verbose=False):
         self.n, self.alpha = n, alpha
+        self.Jx, self.Jy, self.Jz = Jx, Jy, Jz
+        self.hx, self.hy, self.hz = hx, hy, hz
         self.xx_tuples = [('XX', [i, j], Jx*abs(i-j)**(-alpha)) for i in range(0, n-1) for j in range(i+1, n)]
         self.yy_tuples = [('YY', [i, j], Jy*abs(i-j)**(-alpha)) for i in range(0, n-1) for j in range(i+1, n)]
         self.zz_tuples = [('ZZ', [i, j], Jz*abs(i-j)**(-alpha)) for i in range(0, n-1) for j in range(i+1, n)]
