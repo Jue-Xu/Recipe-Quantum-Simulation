@@ -62,12 +62,15 @@ def lighten_color(color, amount=0.3):
     new_color = f"#{r:02x}{g:02x}{b:02x}{a:02x}"
     return new_color
 
-def set_color_cycle(color_cycle, alpha=0.3, mfc=True):
+def set_color_cycle(color_cycle, alpha=0.3, mfc=False, edgecolor=False):
     color_cycle_light = [lighten_color(color, alpha) for color in color_cycle]
     if mfc:
         colors = mpl.cycler(mfc=color_cycle_light, color=color_cycle, markeredgecolor=color_cycle)
     else:
-        colors = mpl.cycler(color=color_cycle, markeredgecolor=color_cycle)
+        if edgecolor:
+            colors = mpl.cycler(color=color_cycle, markeredgecolor=color_cycle)
+        else:
+            colors = mpl.cycler(color=color_cycle)
     mpl.rc('axes', prop_cycle=colors)
 
 default_color_cycle = ["#B65655FF", "#5471abFF", "#6aa66eFF", "#A66E6AFF"]
@@ -167,7 +170,7 @@ def ax_set_text(ax, x_label, y_label, title=None, legend='best', xticks=None, yt
 #     else:
 #         plt.plot(x, y, marker, label=label, linewidth=linewidth, markeredgecolor=markeredgecolor, markeredgewidth=0.5, alpha=alpha)
 
-def plot_evo(ax, t_list, y_list, marker, color='', title='', xlabel='', ylabel='', label='', markersize=8, markeredgewidth=1, inset=False):
+def plot_evo(ax, t_list, y_list, marker, color='', title='', xlabel='', ylabel='', label='', markersize=10, markeredgewidth=1.5, inset=False):
     if color == '':
         ax.plot(t_list, y_list, marker, label=label, markersize=markersize, markeredgewidth=markeredgewidth)
         # ax.plot(t_list, y_list, '-', markersize=5)

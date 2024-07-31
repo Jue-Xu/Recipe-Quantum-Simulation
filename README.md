@@ -16,11 +16,12 @@ pip install quantum-simulation-recipe
 ```python
 import quantum_simulation_recipe as qsr
 from quantum_simulation_recipe import spin
+from quantum_simulation_recipe.plot_config import *  
 
-H = spin.Nearest_Neighbour_1d(4)
+H = spin.Nearest_Neighbour_1d(4, Jx=1.0)
 H.ham
 ```
-More details usage in
+More usage in
 https://jue-xu.github.io/Quantum-Simulation-Cookbook
 <!-- https://github.com/Jue-Xu/Quantum-Simulation-Recipe/tree/main/tests/test.ipynb -->
 
