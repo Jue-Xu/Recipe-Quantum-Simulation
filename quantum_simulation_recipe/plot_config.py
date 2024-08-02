@@ -70,7 +70,7 @@ def set_color_cycle(color_cycle, alpha=0.3, mfc=False, edgecolor=False):
         if edgecolor:
             colors = mpl.cycler(color=color_cycle, markeredgecolor=color_cycle)
         else:
-            colors = mpl.cycler(color=color_cycle)
+            colors = mpl.cycler(color=color_cycle, markeredgecolor=['k']*len(color_cycle))
     mpl.rc('axes', prop_cycle=colors)
 
 default_color_cycle = ["#B65655FF", "#5471abFF", "#6aa66eFF", "#A66E6AFF"]
@@ -170,14 +170,14 @@ def ax_set_text(ax, x_label, y_label, title=None, legend='best', xticks=None, yt
 #     else:
 #         plt.plot(x, y, marker, label=label, linewidth=linewidth, markeredgecolor=markeredgecolor, markeredgewidth=0.5, alpha=alpha)
 
-def plot_evo(ax, t_list, y_list, marker, color='', title='', xlabel='', ylabel='', label='', markersize=10, markeredgewidth=1.5, inset=False):
+def plot_evo(ax, t_list, y_list, marker, color='', title='', xlabel='', ylabel='', label='', markersize=10, markeredgewidth=1.5, lw=1.5, inset=False):
     if color == '':
-        ax.plot(t_list, y_list, marker, label=label, markersize=markersize, markeredgewidth=markeredgewidth)
+        ax.plot(t_list, y_list, marker, label=label, markersize=markersize, markeredgewidth=markeredgewidth, linewidth=lw)
         # ax.plot(t_list, y_list, '-', markersize=5)
         # ax.plot(t_list, y_list, 'o', label=label, markersize=5)
         # ax.plot(t_list, y_list, marker, label=label, markeredgecolor='k', markeredgewidth=0.4, markersize=5)
     else:
-        ax.plot(t_list, y_list, marker, color=color, label=label, markeredgecolor=color, markeredgewidth=markeredgewidth, markersize=markersize, mfc=lighten_color(color, 0.3))
+        ax.plot(t_list, y_list, marker, color=color, label=label, markeredgecolor=color, markeredgewidth=markeredgewidth, markersize=markersize, linewidth=lw, mfc=lighten_color(color, 0.3))
         # ax.plot(t_list, y_list, marker, color=color, label=label, markeredgecolor=color, markeredgewidth=0.4, markersize=markersize, mfc=color[:-2]+"80")
     if not inset: 
         ax.set_title(title)

@@ -59,13 +59,16 @@ setuptools.setup(
     python_requires=">=3.10",
     entry_points={"console_scripts": ["quantum-simulation-recipe = quantum_simulation_recipe.main:main"]},
     install_requires=[
-        "jax == 0.4.12",
         "qiskit >= 1.0.2",
         "openfermion >= 1.5.1",
         "openfermionpyscf >= 0.5",
         "matplotlib >= 3.8.2",
-        "scipy >= 1.12.0",
         "numpy >= 1.23.5",
         "pandas >= 2.2.2",
+        "scipy == 1.12.0",
+        "jax == 0.4.12",
+        "jaxlib == 0.4.12",
+        "colorspace==0.4.4",
+        "multiprocess==0.70.16",
     ],
 )
