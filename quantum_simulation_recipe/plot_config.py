@@ -29,15 +29,16 @@ mpl.rcParams['axes.grid'] = True
 mpl.rcParams['savefig.bbox'] = 'tight'
 mpl.rcParams['savefig.transparent'] = True
 
+SMALL_SIZE, MEDIUM_SIZE, LARGE_SIZE = 14, 18, 24
 
-def set_fontsize(SMALL_SIZE=14, MEDIUM_SIZE=18, LARGE_SIZE=24):
-    plt.rc('font', size=MEDIUM_SIZE)  # controls default text sizes
-    plt.rc('axes', titlesize=LARGE_SIZE)  # fontsize of the axes title
-    plt.rc('axes', labelsize=LARGE_SIZE)  # fontsize of the x and y labels
-    plt.rc('xtick', labelsize=LARGE_SIZE)  # fontsize of the tick labels
-    plt.rc('ytick', labelsize=LARGE_SIZE)  # fontsize of the tick labels
-    plt.rc('legend', fontsize=MEDIUM_SIZE)  # legend fontsize
-    plt.rc('figure', titlesize=LARGE_SIZE)  # fontsize of the figure title
+def set_fontsize(small=SMALL_SIZE, medium=MEDIUM_SIZE, large=LARGE_SIZE):
+    plt.rc('font', size=medium)  # controls default text sizes
+    plt.rc('axes', titlesize=large)  # fontsize of the axes title
+    plt.rc('axes', labelsize=large)  # fontsize of the x and y labels
+    plt.rc('xtick', labelsize=large)  # fontsize of the tick labels
+    plt.rc('ytick', labelsize=large)  # fontsize of the tick labels
+    plt.rc('legend', fontsize=medium)  # legend fontsize
+    plt.rc('figure', titlesize=large)  # fontsize of the figure title
 
 set_fontsize()
 
