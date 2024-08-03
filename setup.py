@@ -65,7 +65,7 @@ setuptools.setup(
         "matplotlib >= 3.8.2",
         "numpy >= 1.23.5",
         "pandas >= 2.2.2",
-        "scipy == 1.12.0",
+        "scipy == 1.14.0",
         "jax == 0.4.12",
         "jaxlib == 0.4.12",
         "colorspace==0.4.4",
