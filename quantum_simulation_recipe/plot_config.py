@@ -7,19 +7,6 @@ import matplotlib.ticker as ticker
 from matplotlib.colors import ListedColormap
 import colorsys
 
-SMALL_SIZE = 14
-MEDIUM_SIZE = 18  #default 10
-LARGE_SIZE = 24
-# MARKER_SIZE = 10
-
-plt.rc('font', size=MEDIUM_SIZE)  # controls default text sizes
-plt.rc('axes', titlesize=LARGE_SIZE)  # fontsize of the axes title
-plt.rc('axes', labelsize=LARGE_SIZE)  # fontsize of the x and y labels
-plt.rc('xtick', labelsize=LARGE_SIZE)  # fontsize of the tick labels
-plt.rc('ytick', labelsize=LARGE_SIZE)  # fontsize of the tick labels
-plt.rc('legend', fontsize=MEDIUM_SIZE)  # legend fontsize
-plt.rc('figure', titlesize=LARGE_SIZE)  # fontsize of the figure title
-
 mpl.rcParams['font.family'] = 'sans-serif'  # 'Helvetica'
 mpl.rcParams['axes.linewidth'] = 1.5
 mpl.rcParams["xtick.direction"] = 'out' # 'out'
@@ -42,6 +29,17 @@ mpl.rcParams['axes.grid'] = True
 mpl.rcParams['savefig.bbox'] = 'tight'
 mpl.rcParams['savefig.transparent'] = True
 
+
+def set_fontsize(SMALL_SIZE=14, MEDIUM_SIZE=18, LARGE_SIZE=24):
+    plt.rc('font', size=MEDIUM_SIZE)  # controls default text sizes
+    plt.rc('axes', titlesize=LARGE_SIZE)  # fontsize of the axes title
+    plt.rc('axes', labelsize=LARGE_SIZE)  # fontsize of the x and y labels
+    plt.rc('xtick', labelsize=LARGE_SIZE)  # fontsize of the tick labels
+    plt.rc('ytick', labelsize=LARGE_SIZE)  # fontsize of the tick labels
+    plt.rc('legend', fontsize=MEDIUM_SIZE)  # legend fontsize
+    plt.rc('figure', titlesize=LARGE_SIZE)  # fontsize of the figure title
+
+set_fontsize()
 
 # Function to lighten a color
 def lighten_color(color, amount=0.3):
