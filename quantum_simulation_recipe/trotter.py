@@ -42,7 +42,8 @@ def pf(h_list, t, r: int, order: int=2, use_jax=False, return_exact=False, verbo
 # def pf_r(h_list, t, r: int, order: int=2, use_jax=False, return_exact=False, verbose=False):
     if order == 1:
         list_U = [expH(herm, t/r, use_jax=use_jax) for herm in h_list]
-        appro_U_dt = np.linalg.multi_dot(list_U)
+        # appro_U_dt = np.linalg.multi_dot(list_U)
+        appro_U_dt = sparse_multi_dot(list_U)
         if isinstance(appro_U_dt, csr_matrix):
             appro_U = appro_U_dt**r
         else:
@@ -50,8 +51,8 @@ def pf(h_list, t, r: int, order: int=2, use_jax=False, return_exact=False, verbo
     elif order == 2:
         list_U = [expH(herm, t/(2*r), use_jax=use_jax) for herm in h_list]
         if verbose: print('----expm Herm finished----')
-        appro_U_dt_forward = np.linalg.multi_dot(list_U)
-        appro_U_dt_reverse = np.linalg.multi_dot(list_U[::-1])
+        appro_U_dt_forward = sparse_multi_dot(list_U)
+        appro_U_dt_reverse = sparse_multi_dot(list_U[::-1])
         # appro_U_dt = list_U[0] @ list_U[1]
         if verbose: print('----matrix product finished----')
         if isinstance(appro_U_dt_forward, csr_matrix):

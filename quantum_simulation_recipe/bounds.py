@@ -3,6 +3,7 @@ from scipy import sparse
 from scipy.linalg import expm
 from numpy.linalg import matrix_power
 import scipy.sparse.linalg as ssla
+from scipy.sparse import csr_matrix, csc_matrix
 
 import numpy as np
 from quantum_simulation_recipe.measure import commutator, norm
@@ -65,6 +66,8 @@ def tight_bound(h_list: list, order: int, t: float, r: int, type='spectral', ver
     elif isinstance(h_list[0], SparsePauliOp):
         n = h_list[0].num_qubits
         d = 2**n
+    # elif isinstance(h_list[0], csr_matrix):
+    #     d = h_list[0].todense().shape[0]
     else:
         raise ValueError('Hamiltonian type is not defined')
 
