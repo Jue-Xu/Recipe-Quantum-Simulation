@@ -58,15 +58,27 @@ def triangle_bound(h, k, t, r):
             error = c * t**2 / (2*r) 
     return error
 
-def tight_bound(h, order: int, t: float, r: int, type='spectral', verbose=False):
-    L = len(h)
-    d = h[0].shape[0]
+def tight_bound(h_list: list, order: int, t: float, r: int, type='spectral', verbose=False):
+    L = len(h_list)
+    if isinstance(h_list[0], np.ndarray):
+        d = h_list[0].shape[0]
+    elif isinstance(h_list[0], SparsePauliOp):
+        n = h_list[0].num_qubits
+        d = 2**n
+    else:
+        raise ValueError('Hamiltonian type is not defined')
+
     if order == 1:
         a_comm = 0
-        for i in range(0, L):
-            temp = np.zeros(h[0].shape, dtype=complex)
-            for j in range(i + 1, L):
-                temp += commutator(h[i], h[j])
+        for i in range(0, L-1):
+            # if isinstance(h_list[i], np.ndarray):
+            #     temp = np.zeros((d, d), dtype=complex)
+            # else:
+            #     temp = SparsePauliOp.from_list([("I"*n, 0)])
+            
+            # for j in range(i + 1, L):
+            #     temp += commutator(h_list[i], h_list[j])
+            temp = sum([commutator(h_list[i], h_list[j]) for j in range(i + 1, L)])
             a_comm += norm(temp, ord=type)
 
         if type == 'spectral':
@@ -78,17 +90,21 @@ def tight_bound(h, order: int, t: float, r: int, type='spectral', verbose=False)
     elif order == 2:
         c1 = 0
         c2 = 0
-        for i in range(0, L):
-            temp = np.zeros(h[0].shape, dtype=complex)
-            for j in range(i + 1, L):
-                temp += h[j]
+        for i in range(0, L-1):
+            # if isinstance(h_list[i], np.ndarray):
+            #     temp = np.zeros((d, d), dtype=complex)
+            # else:
+            #     temp = SparsePauliOp.from_list([("I"*n, 0)])
+            # for j in range(i + 1, L):
+            #     temp += h_list[j]
+            temp = sum(h_list[i+1:])
             # h_sum3 = sum(h[k] for k in range(i+1, L))
             # print(h_sum3.shape)
             # h_sum2 = sum(h[k] for k in range(i+1, L))
-            c1 += norm(commutator(temp, commutator(temp, h[i])), ord=type) 
+            c1 += norm(commutator(temp, commutator(temp, h_list[i])), ord=type) 
             # c1 = norm(commutator(h[0]+h[1], commutator(h[1]+h[2], h[0]))) + norm(commutator(h[2], commutator(h[2], h[1])))
             # c2 = norm(commutator(h[0], commutator(h[0],h[1]+h[2]))) + norm(commutator(h[1], commutator(h[1], h[2])))
-            c2 += norm(commutator(h[i], commutator(h[i], temp)), ord=type)
+            c2 += norm(commutator(h_list[i], commutator(h_list[i], temp)), ord=type)
         if type == 'spectral':
             error = c1 * t**3 / r**2 / 12 + c2 *  t**3 / r**2 / 24 
         elif type == 'fro':
@@ -101,6 +117,8 @@ def tight_bound(h, order: int, t: float, r: int, type='spectral', verbose=False)
             raise ValueError(f'type={type} is not defined')
     else: 
         raise ValueError(f'higer order (order={order}) is not defined')
+
+    if verbose: print(f'c1={c1}, c2={c2}')
 
     return error
 

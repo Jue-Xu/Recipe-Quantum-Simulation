@@ -3,35 +3,29 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
-
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from matplotlib.colors import ListedColormap
 import colorsys
 
 mpl.rcParams['font.family'] = 'sans-serif'  # 'Helvetica'
-mpl.rcParams['axes.linewidth'] = 1.5
 mpl.rcParams["xtick.direction"] = 'out' # 'out'
 mpl.rcParams["ytick.direction"] = 'out'
-mpl.rcParams['xtick.major.width'] = 1.5
-mpl.rcParams['ytick.major.width'] = 1.5
-mpl.rcParams['ytick.minor.width'] = 1.5
-mpl.rcParams['lines.markersize'] = 11
 mpl.rcParams['legend.frameon'] = True
-mpl.rcParams['lines.linewidth'] = 1.5
 # plt.rcParams['lines.markeredgecolor'] = 'k'
-mpl.rcParams['lines.markeredgewidth'] = 1.5
 mpl.rcParams['errorbar.capsize'] = 4
 mpl.rcParams['lines.solid_capstyle'] = 'round'
 mpl.rcParams['lines.dash_capstyle'] = 'round'
 mpl.rcParams['figure.dpi'] = 100
 mpl.rcParams['figure.figsize'] = (8, 6)
 mpl.rcParams['figure.autolayout'] = True
-mpl.rcParams['axes.grid'] = True
+mpl.rcParams['axes.grid'] = False
 mpl.rcParams['savefig.bbox'] = 'tight'
 mpl.rcParams['savefig.transparent'] = True
 
-SMALL_SIZE, MEDIUM_SIZE, LARGE_SIZE = 14, 18, 24
+SMALL_SIZE, MEDIUM_SIZE, LARGE_SIZE = 11, 18, 24
+WIDTH = 1.5
 
-def set_fontsize(small=SMALL_SIZE, medium=MEDIUM_SIZE, large=LARGE_SIZE):
+def set_fontsize(small=SMALL_SIZE, medium=MEDIUM_SIZE, large=LARGE_SIZE, linewidth=WIDTH):
     plt.rc('font', size=medium)  # controls default text sizes
     plt.rc('axes', titlesize=large)  # fontsize of the axes title
     plt.rc('axes', labelsize=large)  # fontsize of the x and y labels
@@ -39,6 +33,14 @@ def set_fontsize(small=SMALL_SIZE, medium=MEDIUM_SIZE, large=LARGE_SIZE):
     plt.rc('ytick', labelsize=large)  # fontsize of the tick labels
     plt.rc('legend', fontsize=medium)  # legend fontsize
     plt.rc('figure', titlesize=large)  # fontsize of the figure title
+    mpl.rcParams['lines.markersize'] = small
+
+    mpl.rcParams['axes.linewidth'] = linewidth
+    mpl.rcParams['xtick.major.width'] = linewidth
+    mpl.rcParams['ytick.major.width'] = linewidth
+    mpl.rcParams['ytick.minor.width'] = linewidth
+    mpl.rcParams['lines.linewidth'] = linewidth
+    mpl.rcParams['lines.markeredgewidth'] = linewidth
 
 set_fontsize()
 
@@ -120,7 +122,7 @@ def linear_loglog_fit(x, y, verbose=False):
 
     return exp_y_pred, a, b
 
-def plot_fit(ax, x, y, var='t', x_offset=1.07, y_offset=1.0, label='', ext_x=[], linestyle='k--', linewidth=1.5, fontsize=MEDIUM_SIZE, verbose=True):
+def plot_fit(ax, x, y, var='t', x_offset=1.07, y_offset=1.0, label='', ext_x=[], linestyle='k--', linewidth=WIDTH, fontsize=MEDIUM_SIZE, verbose=True):
     y_pred_em, a_em, b_em = linear_loglog_fit(x, y)
     if verbose: print(f'a_em: {a_em}; b_em: {b_em}')
     if abs(a_em) < 1e-3: 
@@ -172,14 +174,14 @@ def ax_set_text(ax, x_label, y_label, title=None, legend='best', xticks=None, yt
 #     else:
 #         plt.plot(x, y, marker, label=label, linewidth=linewidth, markeredgecolor=markeredgecolor, markeredgewidth=0.5, alpha=alpha)
 
-def plot_evo(ax, t_list, y_list, marker, color='', title='', xlabel='', ylabel='', label='', markersize=10, markeredgewidth=1.5, lw=1.5, inset=False):
+def plot_evo(ax, t_list, y_list, marker, color='', title='', xlabel='', ylabel='', label='', markersize=SMALL_SIZE, markeredgewidth=WIDTH, lw=WIDTH, alpha=0.3, inset=False):
     if color == '':
         ax.plot(t_list, y_list, marker, label=label, markersize=markersize, markeredgewidth=markeredgewidth, linewidth=lw)
         # ax.plot(t_list, y_list, '-', markersize=5)
         # ax.plot(t_list, y_list, 'o', label=label, markersize=5)
         # ax.plot(t_list, y_list, marker, label=label, markeredgecolor='k', markeredgewidth=0.4, markersize=5)
     else:
-        ax.plot(t_list, y_list, marker, color=color, label=label, markeredgecolor=color, markeredgewidth=markeredgewidth, markersize=markersize, linewidth=lw, mfc=lighten_color(color, 0.3))
+        ax.plot(t_list, y_list, marker, color=color, label=label, markeredgecolor=color, markeredgewidth=markeredgewidth, markersize=markersize, linewidth=lw, mfc=lighten_color(color, alpha))
         # ax.plot(t_list, y_list, marker, color=color, label=label, markeredgecolor=color, markeredgewidth=0.4, markersize=markersize, mfc=color[:-2]+"80")
     if not inset: 
         ax.set_title(title)
@@ -194,7 +196,7 @@ def plot_evo(ax, t_list, y_list, marker, color='', title='', xlabel='', ylabel='
     # else:
     #     ax.set_xticks([])
 
-def letter_annotation(axes, x_offset, y_offset, letters, fontsize=14):
+def letter_annotation(axes, x_offset, y_offset, letters, fontsize=MEDIUM_SIZE):
     # https://towardsdatascience.com/a-guide-to-matplotlib-subfigures-for-creating-complex-multi-panel-figures-70fa8f6c38a4
     for letter in letters:
         axes[letter].text(x_offset, y_offset, f'({letter})', transform=axes[letter].transAxes, size=fontsize, weight='bold')
