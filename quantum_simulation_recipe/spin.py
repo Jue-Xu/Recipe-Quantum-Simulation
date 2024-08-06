@@ -6,6 +6,30 @@ import numpy as np
 from qiskit.quantum_info import SparsePauliOp
 import random
 
+class IQP:
+    def __init__(self, n: int, theta=0, verbose=False):
+        self.n = n
+        if theta == 0:
+            self.pstr = [(''.join(random.choices(['I','Z'], k=n)), 2*np.pi*random.random()) for _ in range(1*n)]
+        else:
+            self.pstr = [(''.join(random.choices(['I','Z'], k=n)), theta) for _ in range(1*n)]
+
+        if verbose: print('pstr: ', self.pstr)
+        self.ham = SparsePauliOp.from_list(self.pstr)
+        # return SparsePauliOp.from_list(pstr)
+
+    # if H_type == 0:
+    #     J = 2
+    #     ising_str = 'ZZ' + 'I' * (n-2)
+    #     uni_ising = [(ising_str[i:]+ising_str[:i], J) for i in range(n)]
+    #     del uni_ising[1]
+    #     print(uni_ising)
+    #     H =  SparsePauliOp.from_list(uni_ising)
+    # else:
+    #     # H = get_hamiltonian(L=n, J=1.0, h=0.2, g=0.0, verbose=True)
+    #     H = IQP_H(n, theta, verbose=True)
+
+
 class Nearest_Neighbour_1d:
     def __init__(self, n: int, Jx=0, Jy=0, Jz=0, hx=0, hy=0, hz=0, pbc=False, verbose=False, rand_field=[]):
         self.n = n
@@ -87,6 +111,15 @@ class Power_Law:
     # def parity_group(self):
     #     print('todo')
     #     return self.ham.to_matrix().todense()
+
+
+
+
+
+
+
+
+
 
 # class TF_Ising_1d:
 #     def __init__(self, n: int, J=1, h=0.2, g=0.0, pbc=False, verbose=False):

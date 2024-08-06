@@ -39,8 +39,8 @@ def set_fontsize(small=SMALL_SIZE, medium=MEDIUM_SIZE, large=LARGE_SIZE, linewid
     mpl.rcParams['xtick.major.width'] = linewidth
     mpl.rcParams['ytick.major.width'] = linewidth
     mpl.rcParams['ytick.minor.width'] = linewidth
-    mpl.rcParams['lines.linewidth'] = linewidth
-    mpl.rcParams['lines.markeredgewidth'] = linewidth
+    mpl.rcParams['lines.linewidth'] = linewidth+0.5
+    mpl.rcParams['lines.markeredgewidth'] = linewidth+0.5
 
 set_fontsize()
 
