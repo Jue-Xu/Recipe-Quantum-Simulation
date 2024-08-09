@@ -7,7 +7,7 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from matplotlib.colors import ListedColormap
 import colorsys
 
-mpl.rcParams['font.family'] = 'sans-serif'  # 'Helvetica'
+mpl.rcParams['font.family'] = 'Helvetica'  # 'Helvetica'  sans-serif
 mpl.rcParams["xtick.direction"] = 'out' # 'out'
 mpl.rcParams["ytick.direction"] = 'out'
 mpl.rcParams['legend.frameon'] = True
@@ -194,14 +194,14 @@ def ax_set_text(ax, x_label, y_label, title=None, legend='best', xticks=None, yt
 #     else:
 #         plt.plot(x, y, marker, label=label, linewidth=linewidth, markeredgecolor=markeredgecolor, markeredgewidth=0.5, alpha=alpha)
 
-def plot_evo(ax, t_list, y_list, marker, color='', title='', xlabel='', ylabel='', label='', markersize=SMALL_SIZE, markeredgewidth=WIDTH, lw=WIDTH, alpha=0.3, inset=False):
-    if color == '':
-        ax.plot(t_list, y_list, marker, label=label, markersize=markersize, markeredgewidth=markeredgewidth, linewidth=lw)
+def plot_evo(ax, t_list, y_list, marker, c='', title='', xlabel='', ylabel='', label='', ms=SMALL_SIZE, mew=WIDTH, lw=WIDTH, alpha=0.3, inset=False):
+    if c == '':
+        ax.plot(t_list, y_list, marker, label=label, markersize=ms, markeredgewidth=mew, linewidth=lw)
         # ax.plot(t_list, y_list, '-', markersize=5)
         # ax.plot(t_list, y_list, 'o', label=label, markersize=5)
         # ax.plot(t_list, y_list, marker, label=label, markeredgecolor='k', markeredgewidth=0.4, markersize=5)
     else:
-        ax.plot(t_list, y_list, marker, color=color, label=label, markeredgecolor=color, markeredgewidth=markeredgewidth, markersize=markersize, linewidth=lw, mfc=lighten_color(color, alpha))
+        ax.plot(t_list, y_list, marker, color=c, label=label, markeredgecolor=c, markeredgewidth=mew, markersize=ms, linewidth=lw, mfc=lighten_color(c, alpha))
         # ax.plot(t_list, y_list, marker, color=color, label=label, markeredgecolor=color, markeredgewidth=0.4, markersize=markersize, mfc=color[:-2]+"80")
     if not inset: 
         ax.set_title(title)

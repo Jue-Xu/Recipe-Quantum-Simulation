@@ -22,7 +22,7 @@ H = spin.Nearest_Neighbour_1d(4, Jx=1.0)
 H.ham
 ```
 More usage in
-https://jue-xu.github.io/Cookbook-Quantum-Simulation
+https://jue-xu.github.io/cookbook-quantum-simulation
 <!-- https://github.com/Jue-Xu/Quantum-Simulation-Recipe/tree/main/tests/test.ipynb -->
 
 
