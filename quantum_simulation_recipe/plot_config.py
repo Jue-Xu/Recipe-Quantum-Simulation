@@ -7,6 +7,7 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from matplotlib.colors import ListedColormap
 import colorsys
 
+# https://github.com/olgabot/sciencemeetproductivity.tumblr.com/blob/master/posts/2012/11/how-to-set-helvetica-as-the-default-sans-serif-font-in.md
 mpl.rcParams['font.family'] = 'Helvetica'  # 'Helvetica'  sans-serif
 mpl.rcParams["xtick.direction"] = 'out' # 'out'
 mpl.rcParams["ytick.direction"] = 'out'
@@ -222,19 +223,22 @@ def letter_annotation(axes, x_offset, y_offset, letters, fontsize=MEDIUM_SIZE):
         axes[letter].text(x_offset, y_offset, f'({letter})', transform=axes[letter].transAxes, size=fontsize, weight='bold')
 
 
-def matrix_plot(M):
+def matrix_plot(M, part='real', cmap='RdYlBu', xlabel='', ylabel='', title='', grid=False):
     fig, ax = plt.subplots()
-    real_matrix = np.real(M)
+    if part=='real':
+        matrix = np.real(M)
+    elif part=='imag':
+        matrix = np.imag(M)
     # Plot the real part using a colormap
-    ax.imshow(real_matrix, cmap='RdYlBu', interpolation='nearest', origin='upper')
+    ax.imshow(matrix, cmap=cmap, interpolation='nearest', origin='upper')
     # Create grid lines
-    ax.grid(True, which='both', color='black', linewidth=1)
+    if grid: ax.grid(True, which='both', color='black', linewidth=1)
     # Add color bar for reference
-    cbar = plt.colorbar(ax.imshow(real_matrix, cmap='RdYlBu', interpolation='nearest', origin='upper'), ax=ax, orientation='vertical')
-    cbar.set_label('Real Part')
+    cbar = plt.colorbar(ax.imshow(matrix, cmap=cmap, interpolation='nearest', origin='upper'), ax=ax, orientation='vertical')
+    cbar.set_label(f'{part} part')
     # Add labels to the x and y axes
-    plt.xlabel('X-axis')
-    plt.ylabel('Y-axis')
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     # Show the plot
-    plt.title('Complex Matrix with Grid')
+    plt.title(title)
     plt.show()
