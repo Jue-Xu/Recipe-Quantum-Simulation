@@ -321,3 +321,58 @@ def LiH():
     LiH_qubit_hamiltonian = jordan_wigner(LiH_fermion_hamiltonian)
     LiH_hamiltonian_list = openfermion_matrix_list(LiH_qubit_hamiltonian)
     return LiH_hamiltonian_list
+
+
+
+"""Define the Hubbard Hamiltonian by OpenFermion."""
+class hubbard_openfermion:
+    def __init__(self, nsites, U, J=-1.0, pbc=False, verbose=False):
+        # Each site has two spins.
+        self.n_qubits = 2 * nsites
+
+        def fop_2_sparse(fops):
+            return [of.get_sparse_operator(fop, n_qubits=self.n_qubits).todense() for fop in fops ]
+
+        # One-body (hopping) terms.
+        self.one_body_fops = [op + of.hermitian_conjugated(op) for op in (
+                of.FermionOperator(((i, 1), (i + 2, 0)), coefficient=J) for i in range(self.n_qubits - 2))]
+        self.one_body_L = len(self.one_body_fops)
+        self.one_body_sparse = fop_2_sparse(self.one_body_fops)
+
+        # Two-body (charge-charge) terms.
+        self.two_body_fops = [
+            of.FermionOperator(((i, 1), (i, 0), (i + 1, 1), (i + 1, 0)), coefficient=U)
+            for i in range(0, self.n_qubits, 2)]
+        self.two_body_sparse = fop_2_sparse(self.two_body_fops)
+
+        self.h_fop = of.fermi_hubbard(1, nsites, tunneling=-J, coulomb=U, periodic=pbc)
+        self.h_sparse = of.get_sparse_operator(self.h_fop)
+        self.ground_energy, self.ground_state = of.get_ground_state(self.h_sparse)
+        assert sum(self.one_body_fops) + sum(self.two_body_fops) == self.h_fop
+        if verbose: 
+            print('one_body_terms: \n', self.one_body_fops)
+            print('one_body_L: ', self.one_body_L)
+            # print('one_body[0]: \n', self.one_body_sparse[0])
+            print('one_body[0]: \n', of.get_sparse_operator(self.one_body_fops[0]))
+            # print('sparse two-body: \n', of.get_sparse_operator(sum(self.two_body_fops)))
+            # print('sparse two-body[0]: \n', self.two_body_sparse[0])
+            # print('ground energy: \n', self.ground_energy)
+        # return ground_energy
+
+        self.one_body_01 = [term for index, term in enumerate(self.one_body_fops) if index % 4 == 0 or index % 4 == 1]
+        self.one_body_01_sparse = fop_2_sparse(self.one_body_01)
+        # print(self.one_body_01)
+        self.one_body_23 = [term for index, term in enumerate(self.one_body_fops) if index % 4 == 2 or index % 4 == 3]
+        self.one_body_23_sparse = fop_2_sparse(self.one_body_23)
+        # print(self.one_body_23)
+        assert sum(self.one_body_01) + sum(self.one_body_23) == sum(self.one_body_fops)
+
+        self.one_body_0 = [term for index, term in enumerate(self.one_body_fops) if index % 3 == 0]
+        self.one_body_1 = [term for index, term in enumerate(self.one_body_fops) if index % 3 == 1]
+        self.one_body_2 = [term for index, term in enumerate(self.one_body_fops) if index % 3 == 2]
+
+        assert sum(self.one_body_0) + sum(self.one_body_1)  + sum(self.one_body_2) == sum(self.one_body_fops)
+
+        self.one_body_0_sparse = [term for index, term in enumerate(self.one_body_sparse) if index % 3 == 0]
+        self.one_body_1_sparse = [term for index, term in enumerate(self.one_body_sparse) if index % 3 == 1]
+        self.one_body_2_sparse = [term for index, term in enumerate(self.one_body_sparse) if index % 3 == 2]
