@@ -29,6 +29,37 @@ class IQP:
     #     # H = get_hamiltonian(L=n, J=1.0, h=0.2, g=0.0, verbose=True)
     #     H = IQP_H(n, theta, verbose=True)
 
+class Cluster_Ising:
+    def __init__(self, n: int, h1, h2, verbose=False):
+        self.n = n  # n is supposed to be even
+        self.h1 = h1
+        self.h2 = h2
+        self.verbose = verbose
+
+        self.ham = SparsePauliOp.from_list([['I'*n, 0]])
+
+        for i in range(n-2):
+            self.ham += SparsePauliOp.from_list([['I'*i + 'ZXZ' + 'I'*(n-i-3), -1]])
+            self.ham += SparsePauliOp.from_list([['I'*i + 'X' + 'I'*(n-i-1), -h1]])
+            self.ham += SparsePauliOp.from_list([['I'*i + 'XX' + 'I'*(n-i-2), -h2]])
+
+        self.ham += SparsePauliOp.from_list([['I'*(n-2)+'XI', -h1], ['I'*(n-1)+'X', -h1]])
+        self.ham += SparsePauliOp.from_list([['I'*(n-2)+'XX', -h2]])
+
+        self.ham.simplify()
+        self.H = self.ham  # alternative name for compatibility with other classes
+        order_string = ''
+        for i in range(1, n+1):
+            if i == 1:
+                order_string += 'Z'
+            elif i % 2 == 0:
+                order_string += 'X'
+            elif i == n:
+                order_string += 'Z'
+            else:
+                order_string += 'I'
+        if verbose: print('order string: ', order_string)
+        self.string_order = SparsePauliOp.from_list([[order_string, 1]])
 
 class Nearest_Neighbour_1d:
     def __init__(self, n: int, Jx=0, Jy=0, Jz=0, hx=0, hy=0, hz=0, pbc=False, verbose=False, rand_field=[]):

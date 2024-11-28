@@ -159,58 +159,6 @@ def tuple2pstr(term, size):
 
     return ''.join(temp)
 
-# def pauli_commutator(pauli_str1, pauli_str2):
-#     assert len(pauli_str1) == len(pauli_str2)
-#     product = []
-#     factor = 0
-#     phase = 1
-#     for index, pauli in enumerate(list(pauli_str1)):
-#         # print(index, pauli, pauli_str2[index])
-#         if pauli == 'I':
-#             product.append(pauli_str2[index])
-#         elif pauli == 'X':
-#             if pauli_str2[index] == 'X':
-#                 product.append('I')
-#             elif pauli_str2[index] == 'Y':
-#                 product.append('Z')
-#                 factor += 1
-#                 phase *= 1j
-#             elif pauli_str2[index] == 'Z':
-#                 product.append('Y')
-#                 factor += 1
-#                 phase *= -1j
-#             else:
-#                 product.append(pauli)
-#         elif pauli == 'Y':  
-#             if pauli_str2[index] == 'X':
-#                 product.append('Z')
-#                 factor += 1
-#                 phase *= -1j
-#             elif pauli_str2[index] == 'Y':
-#                 product.append('I')
-#             elif pauli_str2[index] == 'Z':
-#                 product.append('X')
-#                 factor += 1
-#                 phase *= 1j
-#             else:
-#                 product.append(pauli)
-#         elif pauli == 'Z':
-#             if pauli_str2[index] == 'X':
-#                 product.append('Y')
-#                 factor += 1
-#                 phase *= 1j
-#             elif pauli_str2[index] == 'Y':
-#                 product.append('X')
-#                 factor += 1
-#                 phase *= -1j
-#             elif pauli_str2[index] == 'Z':
-#                 product.append('I')
-#             else:
-#                 product.append(pauli)
-#         else:
-#             raise ValueError('Invalid Pauli string')
-
-#     return product, 2*(factor%2) * phase   
 
 class Hydrogen_Chain:
     def __init__(self, chain_length: int, bond_length: float, verbose=False):
@@ -295,6 +243,60 @@ class Hydrogen_Chain:
             print(f'L: {self.hamiltonian_list.shape}')
             print(f'grouped Hamiltonian: {self.h_group}')
 
+# def pauli_commutator(pauli_str1, pauli_str2):
+#     assert len(pauli_str1) == len(pauli_str2)
+#     product = []
+#     factor = 0
+#     phase = 1
+#     for index, pauli in enumerate(list(pauli_str1)):
+#         # print(index, pauli, pauli_str2[index])
+#         if pauli == 'I':
+#             product.append(pauli_str2[index])
+#         elif pauli == 'X':
+#             if pauli_str2[index] == 'X':
+#                 product.append('I')
+#             elif pauli_str2[index] == 'Y':
+#                 product.append('Z')
+#                 factor += 1
+#                 phase *= 1j
+#             elif pauli_str2[index] == 'Z':
+#                 product.append('Y')
+#                 factor += 1
+#                 phase *= -1j
+#             else:
+#                 product.append(pauli)
+#         elif pauli == 'Y':  
+#             if pauli_str2[index] == 'X':
+#                 product.append('Z')
+#                 factor += 1
+#                 phase *= -1j
+#             elif pauli_str2[index] == 'Y':
+#                 product.append('I')
+#             elif pauli_str2[index] == 'Z':
+#                 product.append('X')
+#                 factor += 1
+#                 phase *= 1j
+#             else:
+#                 product.append(pauli)
+#         elif pauli == 'Z':
+#             if pauli_str2[index] == 'X':
+#                 product.append('Y')
+#                 factor += 1
+#                 phase *= 1j
+#             elif pauli_str2[index] == 'Y':
+#                 product.append('X')
+#                 factor += 1
+#                 phase *= -1j
+#             elif pauli_str2[index] == 'Z':
+#                 product.append('I')
+#             else:
+#                 product.append(pauli)
+#         else:
+#             raise ValueError('Invalid Pauli string')
+
+#     return product, 2*(factor%2) * phase   
+
+
 from qiskit.quantum_info import commutator
 def pauli_commutator(pstr0, pstr1):
     if np.abs(commutator(SparsePauliOp.from_list([(pstr0,1)]), SparsePauliOp.from_list([(pstr1,1)])).simplify().coeffs[0]) == 0:
@@ -303,6 +305,7 @@ def pauli_commutator(pstr0, pstr1):
         return 1
 
     # return hydrogen_hamiltonian_list
+
 def regroup_H(H, verbose=False):    
     pstrs = H.pstrs
     pstrs_coeff = H.pstrs_coeff
