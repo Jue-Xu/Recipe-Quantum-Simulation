@@ -32,7 +32,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="quantum-simulation-recipe",
+    name="quantum_simulation_recipe",
+    # name="quantum-simulation-recipe",
     # version='0.1.6',
     version=package_version,
     # setuptools_git_versioning={
