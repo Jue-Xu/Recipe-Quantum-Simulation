@@ -46,10 +46,13 @@ def unitary2ptm(U, verbose=False):
     
     return PTM(ptm)
 
-def mat2pauli(mat, verbose=False):
+def mat2pauli(mat, return_dict=True, verbose=False):
     n = int(np.log2(mat.shape[0]))
     if verbose: 
         print('num_qubits=', n)
         print('pauli_basis=', pauli_basis(n))
     pauli_coeffs = [np.trace(mat @ SparsePauliOp(op).to_matrix()) for op in pauli_basis(n)]
-    return pauli_coeffs
+    if return_dict:
+        return dict(zip(pauli_basis(n), pauli_coeffs))
+    else:
+        return pauli_coeffs
