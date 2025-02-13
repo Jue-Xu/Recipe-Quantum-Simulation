@@ -40,6 +40,8 @@ def expH(H, t, use_jax=False):
 
 def pf(h_list, t, r: int, order: int=2, use_jax=False, return_exact=False, verbose=False):
 # def pf_r(h_list, t, r: int, order: int=2, use_jax=False, return_exact=False, verbose=False):
+    ## if use_jax=False, maybe encounter weired error for n=10. 
+    # If your computer support Jax, please set use_jax=True 
     if order == 1:
         list_U = [expH(herm, t/r, use_jax=use_jax) for herm in h_list]
         # appro_U_dt = np.linalg.multi_dot(list_U)
@@ -64,7 +66,7 @@ def pf(h_list, t, r: int, order: int=2, use_jax=False, return_exact=False, verbo
         raise ValueError('higher order is not defined')
 
     if return_exact:
-        exact_U = expH(sum(h_list), t)
+        exact_U = expH(sum(h_list), t, use_jax=use_jax)
         return appro_U, exact_U
     else:
         return appro_U
