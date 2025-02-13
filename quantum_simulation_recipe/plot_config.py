@@ -225,7 +225,7 @@ def plot_evo(ax, t_list, y_list, marker, c='', title='', xlabel='', ylabel='', l
 def letter_annotation(axes, x_offset, y_offset, letters, fontsize=MEDIUM_SIZE):
     # https://towardsdatascience.com/a-guide-to-matplotlib-subfigures-for-creating-complex-multi-panel-figures-70fa8f6c38a4
     for letter in letters:
-        axes[letter].text(x_offset, y_offset, f'({letter})', transform=axes[letter].transAxes, size=fontsize, weight='bold')
+        axes[letter].text(x_offset, y_offset, f'({letter.lower()})', transform=axes[letter].transAxes, size=fontsize, weight='bold')
 
 
 def matrix_plot(M, part='real', cmap='RdYlBu', xlabel='', ylabel='', title='', grid=False):
