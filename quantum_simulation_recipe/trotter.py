@@ -71,24 +71,24 @@ def pf(h_list, t, r: int, order: int=2, use_jax=False, return_exact=False, verbo
     else:
         return appro_U
 
-def pf_high(h_list, t: float, r: int, order: int, verbose=False):
+def pf_high(h_list, t: float, r: int, order: int, use_jax=False, verbose=False):
     dt = t/r
     u_p = 1/(4-4**(1/(order-1)))
     if verbose: print(u_p)
     if order == 4:
-        pf2 = pf(h_list, u_p*dt, 1)
+        pf2 = pf(h_list, u_p*dt, 1, use_jax=use_jax)
         pf2_2 = np.linalg.matrix_power(pf2, 2)
         pf4 = np.linalg.matrix_power(pf2_2 @ pf(h_list, (1-4*u_p)*dt, 1) @ pf2_2, r)
         # # be careful **r not work as matrix power
         # (pf(H_list, u_4*dt, 1)**2 @ pf(H_list, (1-4*u_4)*dt, 1) @ pf(H_list, u_4*dt, 1)**2)**r  
         return pf4
     elif order == 6:
-        pf4 = pf_high(h_list, u_p*dt, 1, order=4)
+        pf4 = pf_high(h_list, u_p*dt, 1, order=4, use_jax=use_jax)
         pf4_2 = np.linalg.matrix_power(pf4, 2)
         pf6 = np.linalg.matrix_power(pf4_2 @ pf_high(h_list, (1-4*u_p)*dt, 1, order=4) @ pf4_2, r)
         return pf6
     elif order == 8:
-        pf6 = pf_high(h_list, u_p*dt, 1, order=6)
+        pf6 = pf_high(h_list, u_p*dt, 1, order=6, use_jax=use_jax)
         pf6_2 = np.linalg.matrix_power(pf6, 2)
         pf8 = np.linalg.matrix_power(pf6_2 @ pf_high(h_list, (1-4*u_p)*dt, 1, order=6) @ pf6_2, r)
         return pf8

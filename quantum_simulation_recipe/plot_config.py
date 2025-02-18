@@ -138,7 +138,7 @@ def linear_loglog_fit(x, y, log_axis='xy', verbose=False):
 
     return y_pred, a, b
 
-def plot_fit(ax, x, y, var='t', log_axis='xy', x_offset=1.07, y_offset=1.0, label='', ext_x=[], linestyle='k--', linewidth=WIDTH, fontsize=MEDIUM_SIZE, verbose=True):
+def plot_fit(ax, x, y, var='t', log_axis='xy', x_offset=1.07, y_offset=1.0, label='', ext_x=[], linestyle='k--', linewidth=WIDTH, fontsize=MEDIUM_SIZE, verbose=True, annotate=True):
     y_pred_em, a_em, b_em = linear_loglog_fit(x, y, log_axis=log_axis)
     if verbose: print(f'a_em: {a_em}; b_em: {b_em}')
     if abs(a_em) < 1e-3: 
@@ -162,7 +162,9 @@ def plot_fit(ax, x, y, var='t', log_axis='xy', x_offset=1.07, y_offset=1.0, labe
         ax.plot(x, y_pred_em, linestyle, linewidth=linewidth)
     else:
         ax.plot(x, y_pred_em, linestyle, linewidth=linewidth, label=label)
-    ax.annotate(r'$O(%s^{%s})$' % (var, text_a_em), xy=(x[-1], np.real(y_pred_em)[-1]), xytext=(x[-1]*x_offset, np.real(y_pred_em)[-1]*y_offset), fontsize=fontsize)
+    
+    if annotate:
+        ax.annotate(r'$O(%s^{%s})$' % (var, text_a_em), xy=(x[-1], np.real(y_pred_em)[-1]), xytext=(x[-1]*x_offset, np.real(y_pred_em)[-1]*y_offset), fontsize=fontsize)
 
     return a_em, b_em
 
