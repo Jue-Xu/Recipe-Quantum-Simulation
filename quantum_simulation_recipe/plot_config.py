@@ -202,14 +202,14 @@ def ax_set_text(ax, x_label, y_label, title=None, legend='best', xticks=None, yt
 #     else:
 #         plt.plot(x, y, marker, label=label, linewidth=linewidth, markeredgecolor=markeredgecolor, markeredgewidth=0.5, alpha=alpha)
 
-def plot_evo(ax, t_list, y_list, marker, c='', title='', xlabel='', ylabel='', label='', ms=SMALL_SIZE, mew=WIDTH, lw=WIDTH, alpha=0.3, inset=False):
+def plot_evo(ax, t_list, y_list, marker, c='', title='', xlabel='', ylabel='', label='', ms=SMALL_SIZE, mew=WIDTH, lw=WIDTH, alpha=0.3, inset=False, return_line=False):
     if c == '':
-        ax.plot(t_list, y_list, marker, label=label, markersize=ms, markeredgewidth=mew, linewidth=lw)
+        line = ax.plot(t_list, y_list, marker, label=label, markersize=ms, markeredgewidth=mew, linewidth=lw)
         # ax.plot(t_list, y_list, '-', markersize=5)
         # ax.plot(t_list, y_list, 'o', label=label, markersize=5)
         # ax.plot(t_list, y_list, marker, label=label, markeredgecolor='k', markeredgewidth=0.4, markersize=5)
     else:
-        ax.plot(t_list, y_list, marker, color=c, label=label, markeredgecolor=c, markeredgewidth=mew, markersize=ms, linewidth=lw, mfc=lighten_color(c, alpha))
+        line = ax.plot(t_list, y_list, marker, color=c, label=label, markeredgecolor=c, markeredgewidth=mew, markersize=ms, linewidth=lw, mfc=lighten_color(c, alpha))
         # ax.plot(t_list, y_list, marker, color=color, label=label, markeredgecolor=color, markeredgewidth=0.4, markersize=markersize, mfc=color[:-2]+"80")
     if not inset: 
         ax.set_title(title)
@@ -223,6 +223,7 @@ def plot_evo(ax, t_list, y_list, marker, c='', title='', xlabel='', ylabel='', l
     if ylabel != '': ax.set_ylabel(ylabel)
     # else:
     #     ax.set_xticks([])
+    if return_line: return line
 
 def letter_annotation(axes, x_offset, y_offset, letters, fontsize=MEDIUM_SIZE):
     # https://towardsdatascience.com/a-guide-to-matplotlib-subfigures-for-creating-complex-multi-panel-figures-70fa8f6c38a4
