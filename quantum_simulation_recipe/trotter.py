@@ -49,7 +49,10 @@ def pf(h_list, t, r: int, order: int=2, use_jax=False, return_exact=False, verbo
         if isinstance(appro_U_dt, csr_matrix):
             appro_U = appro_U_dt**r
         else:
-            appro_U = np.linalg.matrix_power(appro_U_dt, r)
+            if use_jax:
+                appro_U = jnp.linalg.matrix_power(appro_U_dt, r)
+            else:
+                appro_U = np.linalg.matrix_power(appro_U_dt, r)
     elif order == 2:
         list_U = [expH(herm, t/(2*r), use_jax=use_jax) for herm in h_list]
         if verbose: print('----expm Herm finished----')
@@ -60,7 +63,10 @@ def pf(h_list, t, r: int, order: int=2, use_jax=False, return_exact=False, verbo
         if isinstance(appro_U_dt_forward, csr_matrix):
             appro_U = (appro_U_dt_forward @ appro_U_dt_reverse)**r
         else:
-            appro_U = np.linalg.matrix_power(appro_U_dt_reverse @ appro_U_dt_forward, r)
+            if use_jax:
+                appro_U = jnp.linalg.matrix_power(appro_U_dt_reverse @ appro_U_dt_forward, r)
+            else:
+                appro_U = np.linalg.matrix_power(appro_U_dt_reverse @ appro_U_dt_forward, r)
         if verbose: print('----matrix power finished----')
     else: 
         raise ValueError('higher order is not defined')
@@ -73,24 +79,46 @@ def pf(h_list, t, r: int, order: int=2, use_jax=False, return_exact=False, verbo
 
 def pf_high(h_list, t: float, r: int, order: int, use_jax=False, verbose=False):
     dt = t/r
-    u_p = 1/(4-4**(1/(order-1)))
-    if verbose: print(u_p)
-    if order == 4:
+    if order != 1 and order != 2:
+        # print('order: ', order) 
+        u_p = 1/(4-4**(1/(order-1)))
+        if verbose: print(u_p)
+    if order == 1:
+        pf1 = pf(h_list, t, r, order=1, use_jax=use_jax)
+        return pf1
+    elif order == 2:
+        pf2 = pf(h_list, t, r, order=2, use_jax=use_jax)
+        return pf2
+    elif order == 4:
         pf2 = pf(h_list, u_p*dt, 1, use_jax=use_jax)
-        pf2_2 = np.linalg.matrix_power(pf2, 2)
-        pf4 = np.linalg.matrix_power(pf2_2 @ pf(h_list, (1-4*u_p)*dt, 1) @ pf2_2, r)
+        if use_jax:
+            pf2_2 = jnp.linalg.matrix_power(pf2, 2)
+            pf4 = jnp.linalg.matrix_power(pf2_2 @ pf(h_list, (1-4*u_p)*dt, 1) @ pf2_2, r)
+        else:
+            pf2_2 = np.linalg.matrix_power(pf2, 2)
+            pf4 = np.linalg.matrix_power(pf2_2 @ pf(h_list, (1-4*u_p)*dt, 1) @ pf2_2, r)
         # # be careful **r not work as matrix power
         # (pf(H_list, u_4*dt, 1)**2 @ pf(H_list, (1-4*u_4)*dt, 1) @ pf(H_list, u_4*dt, 1)**2)**r  
         return pf4
     elif order == 6:
         pf4 = pf_high(h_list, u_p*dt, 1, order=4, use_jax=use_jax)
-        pf4_2 = np.linalg.matrix_power(pf4, 2)
-        pf6 = np.linalg.matrix_power(pf4_2 @ pf_high(h_list, (1-4*u_p)*dt, 1, order=4) @ pf4_2, r)
+        pf4_mid = pf_high(h_list, (1-4*u_p)*dt, 1, order=4, use_jax=use_jax)
+        if use_jax:
+            pf4_2 = jnp.linalg.matrix_power(pf4, 2)
+            pf6 = jnp.linalg.matrix_power(pf4_2 @ pf4_mid @ pf4_2, r)
+        else:
+            pf4_2 = np.linalg.matrix_power(pf4, 2)
+            pf6 = np.linalg.matrix_power(pf4_2 @ pf4_mid @ pf4_2, r)
         return pf6
     elif order == 8:
         pf6 = pf_high(h_list, u_p*dt, 1, order=6, use_jax=use_jax)
-        pf6_2 = np.linalg.matrix_power(pf6, 2)
-        pf8 = np.linalg.matrix_power(pf6_2 @ pf_high(h_list, (1-4*u_p)*dt, 1, order=6) @ pf6_2, r)
+        pf6_mid = pf_high(h_list, (1-4*u_p)*dt, 1, order=6, use_jax=use_jax)
+        if use_jax:
+            pf6_2 = jnp.linalg.matrix_power(pf6, 2)
+            pf8 = jnp.linalg.matrix_power(pf6_2 @ pf6_mid @ pf6_2, r)
+        else:
+            pf6_2 = np.linalg.matrix_power(pf6, 2)
+            pf8 = np.linalg.matrix_power(pf6_2 @ pf6_mid @ pf6_2, r)
         return pf8
     else: 
         raise ValueError(f'higher order={order} is not defined')
