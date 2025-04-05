@@ -5,9 +5,11 @@
 import numpy as np
 from qiskit.quantum_info import SparsePauliOp
 import random
+import itertools
 
 class IQP:
     def __init__(self, n: int, theta=0, verbose=False):
+        ## todo degree-k
         self.n = n
         if theta == 0:
             self.pstr = [(''.join(random.choices(['I','Z'], k=n)), 2*np.pi*random.random()) for _ in range(1*n)]
@@ -30,6 +32,7 @@ class IQP:
     #     H = IQP_H(n, theta, verbose=True)
 
 class Cluster_Ising:
+    ## often used in machine learning for quantum phase transition
     def __init__(self, n: int, h1, h2, verbose=False):
         self.n = n  # n is supposed to be even
         self.h1 = h1
@@ -60,6 +63,62 @@ class Cluster_Ising:
                 order_string += 'I'
         if verbose: print('order string: ', order_string)
         self.string_order = SparsePauliOp.from_list([[order_string, 1]])
+
+class Nearest_Neighbour_2d:
+    def __init__(self, nd: int, Jx=0, Jy=0, Jz=0, hx=0, hy=0, hz=0, pbc=False, verbose=False, rand_field=[]):
+        ## 2D square (todo rectangular) lattice
+        ##     n is the number of qubits in each direction
+        self.nd = nd
+        self.Jx, self.Jy, self.Jz = Jx, Jy, Jz
+        self.hx, self.hy, self.hz = hx, hy, hz
+
+        def neighbor_list(n):
+            nq = n**2
+            return nq, [(i,j) for i,j in itertools.combinations(range(nq), 2) if abs(i-j)%n + abs(i//n-j//n)==1]
+
+        self.n, self.loc_pairs = neighbor_list(nd)
+        self.xx_tuples = [('XX', pair, Jx) for pair in self.loc_pairs]
+        self.yy_tuples = [('YY', pair, Jy) for pair in self.loc_pairs]
+        self.zz_tuples = [('ZZ', pair, Jz) for pair in self.loc_pairs]
+
+        if len(rand_field) == 0:
+            self.rand_field = [0]*self.n
+        elif len(rand_field) >= self.n:
+            self.rand_field = rand_field[:self.n]
+        else:
+            raise ValueError(f'Length of random field should be at least {self.n}!')
+
+        self.x_tuples = [('X', [i], (self.rand_field[i]+1)*hx) for i in range(0, self.n)] 
+        self.y_tuples = [('Y', [i], (self.rand_field[i]+1)*hy) for i in range(0, self.n)] 
+        self.z_tuples = [('Z', [i], (self.rand_field[i]+1)*hz) for i in range(0, self.n)] 
+
+        if pbc: 
+            for i in range(self.nd):
+                ## add periodic boundary conditions in horizontal direction
+                self.xx_tuples.append(('XX', [i*nd, (i+1)*nd-1], Jx))
+                self.yy_tuples.append(('YY', [i*nd, (i+1)*nd-1], Jy))
+                self.zz_tuples.append(('ZZ', [i*nd, (i+1)*nd-1], Jz))
+                ## add periodic boundary conditions in vertical direction
+                self.xx_tuples.append(('XX', [i, i+nd*(nd-1)], Jx))
+                self.yy_tuples.append(('YY', [i, i+nd*(nd-1)], Jy))
+                self.zz_tuples.append(('ZZ', [i, i+nd*(nd-1)], Jz))
+
+        self.ham = SparsePauliOp.from_sparse_list([*self.xx_tuples, *self.yy_tuples, *self.zz_tuples, *self.x_tuples, *self.y_tuples, *self.z_tuples], num_qubits=self.n).simplify() 
+
+        self.xyz_group()
+        # self.par_group()
+        if verbose: 
+            print('The Hamiltonian: \n', self.ham)
+            print('The xyz grouping: \n', self.ham_xyz)
+            # print('The parity grouping: \n', self.ham_par)
+
+    def xyz_group(self):
+        self.x_terms = SparsePauliOp.from_sparse_list([*self.xx_tuples, *self.x_tuples], num_qubits=self.n).simplify()
+        self.y_terms = SparsePauliOp.from_sparse_list([*self.yy_tuples, *self.y_tuples], num_qubits=self.n).simplify()
+        self.z_terms = SparsePauliOp.from_sparse_list([*self.zz_tuples, *self.z_tuples], num_qubits=self.n).simplify()
+        self.ham_xyz = [self.x_terms, self.y_terms, self.z_terms]
+        ## remove empty terms e.g. No Y terms
+        self.ham_xyz = [item for item in self.ham_xyz if not np.all(abs(item.coeffs) == 0)]
 
 class Nearest_Neighbour_1d:
     def __init__(self, n: int, Jx=0, Jy=0, Jz=0, hx=0, hy=0, hz=0, pbc=False, verbose=False, rand_field=[]):
