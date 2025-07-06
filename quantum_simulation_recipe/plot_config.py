@@ -5,19 +5,23 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from matplotlib.colors import ListedColormap
-from matplotlib.font_manager import FontManager
+# from matplotlib.font_manager import FontManager
+import matplotlib.font_manager as fm
 import colorsys
 
 # https://github.com/olgabot/sciencemeetproductivity.tumblr.com/blob/master/posts/2012/11/how-to-set-helvetica-as-the-default-sans-serif-font-in.md
 # mpl.rcParams['font.family'] = 'Helvetica'  # 'Helvetica' or 'sans-serif'
-fm = FontManager()
-font_names = [f.name for f in fm.ttflist] # Get list of available font names
-if 'Helvetica' in font_names:  # Check if Helvetica is available
-    mpl.rcParams['font.family'] = 'Helvetica'
-    # print("Using Helvetica font.")
-else:
-    mpl.rcParams['font.family'] = 'sans-serif'
-    print("Helvetica not found. Using sans-serif font instead.")
+# Just try to use Helvetica - matplotlib will fall back automatically if not found
+mpl.rcParams['font.family'] = ['Helvetica', 'sans-serif']
+# This sets Helvetica as first choice, sans-serif as fallback
+
+# Use the existing font manager instead of creating a new one
+# font_names = [f.name for f in fm.fontManager.ttflist]  # Note: fm.fontManager, not FontManager()
+# if 'Helvetica' in font_names:
+#     mpl.rcParams['font.family'] = 'Helvetica'
+# else:
+#     mpl.rcParams['font.family'] = 'sans-serif'
+#     print("Helvetica not found. Using sans-serif font instead.")
 
 mpl.rcParams["xtick.direction"] = 'out' # 'out'
 mpl.rcParams["ytick.direction"] = 'out'
