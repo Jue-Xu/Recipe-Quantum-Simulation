@@ -30,7 +30,7 @@ mpl.rcParams['legend.frameon'] = True
 mpl.rcParams['errorbar.capsize'] = 4
 mpl.rcParams['lines.solid_capstyle'] = 'round'
 mpl.rcParams['lines.dash_capstyle'] = 'round'
-mpl.rcParams['figure.dpi'] = 100
+mpl.rcParams['figure.dpi'] = 300
 mpl.rcParams['figure.figsize'] = (8, 6)
 mpl.rcParams['figure.autolayout'] = True
 mpl.rcParams['axes.grid'] = False
@@ -239,10 +239,18 @@ def plot_evo(ax, t_list, y_list, marker, c='', title='', xlabel='', ylabel='', l
     #     ax.set_xticks([])
     if return_line: return line
 
-def letter_annotation(axes, x_offset, y_offset, letters, fontsize=MEDIUM_SIZE):
+def letter_annotation(axes, x_offset, y_offset, letters, fontsize=MEDIUM_SIZE, brackets=False, lowercase=True):
     # https://towardsdatascience.com/a-guide-to-matplotlib-subfigures-for-creating-complex-multi-panel-figures-70fa8f6c38a4
     for letter in letters:
-        axes[letter].text(x_offset, y_offset, f'({letter.lower()})', transform=axes[letter].transAxes, size=fontsize, weight='bold')
+        if lowercase:
+            new_letter = letter.lower()
+        else:
+            new_letter = letter.upper()
+        
+        if brackets:
+            axes[letter].text(x_offset, y_offset, f'({new_letter})', transform=axes[letter].transAxes, size=fontsize, weight='bold')
+        else:
+            axes[letter].text(x_offset, y_offset, f'{new_letter}', transform=axes[letter].transAxes, size=fontsize, weight='bold')
 
 
 def matrix_plot(M, part='real', cmap='RdYlBu', xlabel='', ylabel='', title='', grid=False):
